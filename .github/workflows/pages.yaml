@@ -24,7 +24,9 @@ jobs:
           virtualenvs-create: false
 
       - name: Install requirements
-        run: POETRY_VIRTUALENVS_CREATE=false poetry install
+        env:
+          POETRY_VIRTUALENVS_CREATE: "false"
+        run: poetry install
 
       - name: Build pages
-        run: poe docs
+        run: pdoc3 --html --output-dir ./.public frantic
