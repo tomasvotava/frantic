@@ -5,6 +5,20 @@ Firestore with Pydantic models integration.
 Please note that this module is a work in progress. API may change over time. Also, the code is not tested yet
 and there are no security checks run periodically.
 
+## Installation
+
+### Using `pip`
+
+```console
+pip install frantic
+```
+
+### Using `poetry`
+
+```console
+poetry add frantic
+```
+
 ## Basic usage
 
 If you have your service account key path set in `GOOGLE_APPLICATION_CREDENTIALS`, it's fairly easy:
