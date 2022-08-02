@@ -20,7 +20,7 @@ jobs:
 
       - name: Install poetry
         run: |
-          curl -sSL https://install.python-poetry.org | python -
+          curl -sSL https://install.python-poetry.org | python3.10 -
 
       - name: Install dependencies
         env:
@@ -28,4 +28,4 @@ jobs:
         run: ~/.local/bin/poetry install
 
       - name: Build pages
-        run: python -m pdoc3 --html --output-dir ./.public frantic
+        run: python3.10 -m pdoc3 --html --output-dir ./.public frantic
