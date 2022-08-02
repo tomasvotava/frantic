@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         env:
           POETRY_VIRTUALENVS_CREATE: "false"
-        run: ~/.local/bin/poetry install
-
-      - name: Build pages
-        run: python3.10 -m pdoc3 --html --output-dir ./.public frantic
+        run: |
+          ~/.local/bin/poetry install
+          pdoc3 --html --output-dir ./.public frantic
