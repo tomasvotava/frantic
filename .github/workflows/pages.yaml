@@ -22,9 +22,14 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3.10 -
 
-      - name: Install dependencies
+      - name: Install and build
         env:
           POETRY_VIRTUALENVS_CREATE: "false"
         run: |
           ~/.local/bin/poetry install
           pdoc3 --html --output-dir ./.public frantic
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .public/frantic
