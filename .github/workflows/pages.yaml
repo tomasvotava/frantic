@@ -1,0 +1,35 @@
+name: pages
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3.10 -
+
+      - name: Install and build
+        env:
+          POETRY_VIRTUALENVS_CREATE: "false"
+        run: |
+          ~/.local/bin/poetry install
+          pdoc3 --html --output-dir ./.public frantic
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .public/frantic
