@@ -29,7 +29,7 @@ class Frantic:
 
     def __init__(self, *, client: Optional[AsyncClient] = None, prefix: Optional[str] = None):
         self.client = client or client_factory()
-        self.prefix = (prefix or "").rstrip("/")
+        self.prefix = (prefix or "").rstrip("/").lstrip("/")
 
     def _get_path(self, model: Type[ModelType]) -> str:
         """Get collection path for a specified model"""
