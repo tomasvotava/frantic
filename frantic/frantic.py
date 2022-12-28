@@ -34,7 +34,7 @@ class Frantic:
     def _get_path(self, model: Type[ModelType]) -> str:
         """Get collection path for a specified model"""
         colname = model.collection or model.__name__.lower()
-        return f"{self.prefix}/{colname}"
+        return f"{self.prefix}/{colname}" if self.prefix else colname
 
     async def get(self, model: Type[ModelType], did: str) -> Optional[ModelType]:
         """Get a single document of a type {model} by its document id {did}
@@ -62,7 +62,9 @@ class Frantic:
         """Add instance as a document within corresponding collection"""
         collection_path = self._get_path(instance.__class__)
         collection = self.client.collection(collection_path)
-        _, docref = await collection.add(instance.dict(exclude={"id"}))
+        _, docref = await collection.add(
+            instance.dict(exclude={"id"}), document_id=instance.id if instance.id is not None else None
+        )
         instance.id = docref.id
         return instance
 
