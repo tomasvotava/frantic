@@ -6,8 +6,10 @@ from typing import AsyncGenerator, Optional, Type, TypeVar, Union, cast
 
 from google.cloud.firestore import AsyncClient
 from google.oauth2.service_account import Credentials
+from google.api_core.exceptions import AlreadyExists
 
 from frantic.base import BaseModel
+from frantic import exceptions
 
 
 ModelType = TypeVar("ModelType", bound=BaseModel)  # pylint: disable=invalid-name
@@ -62,9 +64,12 @@ class Frantic:
         """Add instance as a document within corresponding collection"""
         collection_path = self._get_path(instance.__class__)
         collection = self.client.collection(collection_path)
-        _, docref = await collection.add(
-            instance.dict(exclude={"id"}), document_id=instance.id if instance.id is not None else None
-        )
+        try:
+            _, docref = await collection.add(
+                instance.dict(exclude={"id"}), document_id=instance.id if instance.id is not None else None
+            )
+        except AlreadyExists as error:
+            raise exceptions.AlreadyExists(instance.id) from error
         instance.id = docref.id
         return instance
 
