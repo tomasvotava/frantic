@@ -63,7 +63,7 @@ class Frantic:
     def _get_path(self, model: Type[ModelType]) -&gt; str:
         &#34;&#34;&#34;Get collection path for a specified model&#34;&#34;&#34;
         colname = model.collection or model.__name__.lower()
-        return f&#34;{self.prefix}/{colname}&#34;
+        return f&#34;{self.prefix}/{colname}&#34; if self.prefix else colname
 
     async def get(self, model: Type[ModelType], did: str) -&gt; Optional[ModelType]:
         &#34;&#34;&#34;Get a single document of a type {model} by its document id {did}
@@ -91,7 +91,9 @@ class Frantic:
         &#34;&#34;&#34;Add instance as a document within corresponding collection&#34;&#34;&#34;
         collection_path = self._get_path(instance.__class__)
         collection = self.client.collection(collection_path)
-        _, docref = await collection.add(instance.dict(exclude={&#34;id&#34;}))
+        _, docref = await collection.add(
+            instance.dict(exclude={&#34;id&#34;}), document_id=instance.id if instance.id is not None else None
+        )
         instance.id = docref.id
         return instance
 
@@ -164,7 +166,7 @@ class Frantic:
     def _get_path(self, model: Type[ModelType]) -&gt; str:
         &#34;&#34;&#34;Get collection path for a specified model&#34;&#34;&#34;
         colname = model.collection or model.__name__.lower()
-        return f&#34;{self.prefix}/{colname}&#34;
+        return f&#34;{self.prefix}/{colname}&#34; if self.prefix else colname
 
     async def get(self, model: Type[ModelType], did: str) -&gt; Optional[ModelType]:
         &#34;&#34;&#34;Get a single document of a type {model} by its document id {did}
@@ -192,7 +194,9 @@ class Frantic:
         &#34;&#34;&#34;Add instance as a document within corresponding collection&#34;&#34;&#34;
         collection_path = self._get_path(instance.__class__)
         collection = self.client.collection(collection_path)
-        _, docref = await collection.add(instance.dict(exclude={&#34;id&#34;}))
+        _, docref = await collection.add(
+            instance.dict(exclude={&#34;id&#34;}), document_id=instance.id if instance.id is not None else None
+        )
         instance.id = docref.id
         return instance
 
@@ -229,7 +233,9 @@ class Frantic:
     &#34;&#34;&#34;Add instance as a document within corresponding collection&#34;&#34;&#34;
     collection_path = self._get_path(instance.__class__)
     collection = self.client.collection(collection_path)
-    _, docref = await collection.add(instance.dict(exclude={&#34;id&#34;}))
+    _, docref = await collection.add(
+        instance.dict(exclude={&#34;id&#34;}), document_id=instance.id if instance.id is not None else None
+    )
     instance.id = docref.id
     return instance</code></pre>
 </details>
